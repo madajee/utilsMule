@@ -15,9 +15,12 @@ http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/cor
     <flow name="dateconvertorFlow">
         <http:listener config-ref="HTTP_Listener_Configuration" path="/convertDate" doc:name="HTTP"/>
         <set-variable variableName="varConvertDate" value="#[message.inboundProperties.'http.query.params'.convertDate]" doc:name="Variable"/>
-        <set-variable variableName="varConvertDateFormat" value="#[message.inboundProperties.'http.query.params'.convertDateFormat]" doc:name="Variable"/>
-    	<logger message="ConverDate: #[flowVars.varConvertDate] ConverFormat: #[flowVars.varConvertDateFormat]" level="INFO" doc:name="Logger"/>
-        <expression-component doc:name="Expression"><![CDATA[app.registry.dateconvertor.convertDate();]]></expression-component>
+        <set-variable variableName="varFromFormat" value="#[message.inboundProperties.'http.query.params'.FromFormat]" doc:name="Variable"/>
+        <set-variable variableName="varToFormat" value="#[message.inboundProperties.'http.query.params'.ToFormat]" doc:name="Variable"/>
+        <set-variable variableName="varToDate" value="&quot;&quot;" doc:name="Variable"/>
+    	<logger message="ConverDate: #[flowVars.varConvertDate] FromFormat: #[flowVars.varFromFormat] ToFormat: #[flowVars.varToFormat]" level="INFO" doc:name="Logger"/>
+        <!--  <expression-component doc:name="Expression"><![CDATA[app.registry.dateconvertor.convertDate(flowVars.varConvertDate, flowVars.varFromFormat, flowVars.varToFormat);]]></expression-component>-->
+        <expression-component doc:name="Expression"><![CDATA[flowVars.varToDate = app.registry.dateconvertor.convertDate(flowVars.varConvertDate,flowVars.varFromFormat, flowVars.varToFormat);]]></expression-component>
     </flow>
 </mule>
 
